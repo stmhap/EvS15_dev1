@@ -144,18 +144,21 @@ class LitTransformer(LightningModule):
             metric = torchmetrics.text.CharErrorRate() 
             cer = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation cer', cer, self.trainer.global_step) 
+            self.log("val/cer", cer, prog_bar=True)    
             writer.flush() 
 
             # Compute the word error rate 
             metric = torchmetrics.text.WordErrorRate() 
             wer = metric(self.val_predicted, self.val_expected) 
-            writer.add_scalar('validation wer', wer, self.trainer.global_step) 
+            writer.add_scalar('validation wer', wer, self.trainer.global_step)
+            self.log("val/wer", wer, prog_bar=True)
             writer.flush() 
 
             # Compute the BLEU metric 
             metric = torchmetrics.text.BLEUScore() 
             bleu = metric(self.val_predicted, self.val_expected) 
-            writer.add_scalar('validation BLEU', bleu, self.trainer.global_step) 
+            writer.add_scalar('validation BLEU', bleu, self.trainer.global_step)
+            self.log("val/bleu", bleu, prog_bar=True)
             writer.flush() 
             
         self.val_count = 0
