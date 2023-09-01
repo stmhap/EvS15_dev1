@@ -20,7 +20,8 @@ from tokenizers.models import WordLevel
 from tokenizers.trainers import WordLevelTrainer
 from tokenizers.pre_tokenizers import Whitespace 
 
-import torchmetrics 
+import torchmetrics
+import torchmetrics.text
 from torch.utils.tensorboard import SummaryWriter 
 
 from pytorch_lightning import LightningModule
@@ -140,19 +141,19 @@ class LitTransformer(LightningModule):
         if writer:
             # Evaluate the character error rate 
             # Compute the char error rate 
-            metric = torchmetrics.CharErrorRate() 
+            metric = torchmetrics.text.CharErrorRate() 
             cer = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation cer', cer, self.trainer.global_step) 
             writer.flush() 
 
             # Compute the word error rate 
-            metric = torchmetrics.WordErrorRate() 
+            metric = torchmetrics.text.WordErrorRate() 
             wer = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation wer', wer, self.trainer.global_step) 
             writer.flush() 
 
             # Compute the BLEU metric 
-            metric = torchmetrics.BLEUScore() 
+            metric = torchmetrics.text.BLEUScore() 
             bleu = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation BLEU', bleu, self.trainer.global_step) 
             writer.flush() 
