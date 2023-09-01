@@ -144,7 +144,8 @@ class LitTransformer(LightningModule):
             metric = torchmetrics.text.CharErrorRate() 
             cer = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation cer', cer, self.trainer.global_step) 
-            self.log("val/cer", cer, prog_bar=True)    
+            self.log("val/cer", cer, prog_bar=True)
+            print(f'Val CER at end of epoch {self.trainer.current_epoch} = {cer}')
             writer.flush() 
 
             # Compute the word error rate 
@@ -152,6 +153,7 @@ class LitTransformer(LightningModule):
             wer = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation wer', wer, self.trainer.global_step)
             self.log("val/wer", wer, prog_bar=True)
+            print(f'Val WER at end of epoch {self.trainer.current_epoch} = {wer}')
             writer.flush() 
 
             # Compute the BLEU metric 
@@ -159,6 +161,7 @@ class LitTransformer(LightningModule):
             bleu = metric(self.val_predicted, self.val_expected) 
             writer.add_scalar('validation BLEU', bleu, self.trainer.global_step)
             self.log("val/bleu", bleu, prog_bar=True)
+            print(f'Val BLEU at end of epoch {self.trainer.current_epoch} = {bleu}')
             writer.flush() 
             
         self.val_count = 0
